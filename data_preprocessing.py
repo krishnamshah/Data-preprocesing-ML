@@ -22,9 +22,16 @@ random_state = 1234
 #====================================================================
 #importing the dataset
 
-
-
-
+#outliers
+def outliers(df,q1,q2,thresh=1.5):
+    print("Before shape: ", df.shape)
+    Q1 = df.quantile(q1)
+    Q3 = df.quantile(q2)
+    IQR = Q3 - Q1
+    out_r = ((df < (Q1 - 1.5 * IQR)) | (df > (Q3 + 1.5 * IQR))).sum(axis=0).sort_values(ascending = False)
+    print(out_r)
+    print("Free from outliers:",len(out_r[out_r<1]))
+    return out_r[out_r<1]
 
 
 def preprocessing(data):
