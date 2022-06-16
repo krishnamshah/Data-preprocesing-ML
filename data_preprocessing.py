@@ -33,6 +33,20 @@ def outliers(df,q1,q2,thresh=1.5):
     print("Free from outliers:",len(out_r[out_r<1]))
     return out_r[out_r<1]
 
+#drops constant features	
+def drop_constant_feat(df,thres = 0.10):
+    print("Before: df shape:", df.shape)
+    constant_filter = VarianceThreshold(threshold=0.10)
+    constant_filter.fit_transform(df)
+    constant_columns = [column for column in df.columns
+                        if column not in df.columns[constant_filter.get_support()]]
+
+    print("No. of constant columns:",len(constant_columns))
+    constant_columns_to_remove = [i.strip() for i in constant_columns]
+    df = df.drop(constant_columns_to_remove, axis=1)
+    print("After: df shape:", df.shape)
+
+    return df
 
 def preprocessing(data):
     # list of samples with no missing values
