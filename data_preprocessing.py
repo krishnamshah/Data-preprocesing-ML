@@ -112,3 +112,5 @@ def preprocessing(data):
 
     return X,y
 
+X,y = preprocessing(df)
+
