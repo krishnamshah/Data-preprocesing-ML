@@ -49,7 +49,7 @@ def drop_constant_feat(df,thres = 0.10):
     return df
 
 #checks and remoevs 90% correlated features
-def drop_corr_feat(data):
+def drop_corr_feat(data, thres = 0.9):
     """
     data : pandas dataframe
     """
@@ -57,7 +57,7 @@ def drop_corr_feat(data):
     columns = np.full((cor.shape[0],), True, dtype=bool)
     for i in range(cor.shape[0]):
         for j in range(i+1, cor.shape[0]):
-            if np.abs(cor.iloc[i,j]) >= 0.9:
+            if np.abs(cor.iloc[i,j]) >= thres:
                 if columns[j]:
                     columns[j] = False
     selected_columns = data.columns[columns]
@@ -104,7 +104,7 @@ def preprocessing(data):
         except Exception:
             print(f"Failed to convert: {col}")
 
-    data = drop_corr_feat(Xx)
+    data = drop_corr_feat(Xx, 0.9)
     
     X = data_corr.copy()
 
