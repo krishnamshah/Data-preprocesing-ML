@@ -48,6 +48,23 @@ def drop_constant_feat(df,thres = 0.10):
 
     return df
 
+#checks and remoevs 90% correlated features
+def drop_corr_feat(data):
+    """
+    data : pandas dataframe
+    """
+    cor = data.corr()
+    columns = np.full((cor.shape[0],), True, dtype=bool)
+    for i in range(cor.shape[0]):
+        for j in range(i+1, cor.shape[0]):
+            if np.abs(cor.iloc[i,j]) >= 0.9:
+                if columns[j]:
+                    columns[j] = False
+    selected_columns = data.columns[columns]
+    data_corr = data[selected_columns]
+    print("Data shape after removing correlated features: ",data_corr.shape)
+    return data_corr
+
 def preprocessing(data):
     # list of samples with no missing values
     null = (data.isnull().sum(axis=1) / len(data)).sort_values(ascending = False)
@@ -86,24 +103,8 @@ def preprocessing(data):
             Xx[col] = data[col].astype(float)
         except Exception:
             print(f"Failed to convert: {col}")
-            
-    #dropping null rows
-    #data=data.dropna()
-    #print(data.shape)
-    # check if there missing data (this datasets do not show NAs
-    # as we will see in the empty list output)
-    
-    data_X = Xx.copy()
-    cor = data_X.corr()
-    columns = np.full((cor.shape[0],), True, dtype=bool)
-    for i in range(cor.shape[0]):
-        for j in range(i+1, cor.shape[0]):
-            if np.abs(cor.iloc[i,j]) >= 0.9:
-                if columns[j]:
-                    columns[j] = False
-    selected_columns = data_X.columns[columns]
-    data_corr = data_X[selected_columns]
-    print("Data shape after removing correlated features: ",data_corr.shape)
+
+    data = drop_corr_feat(Xx)
     
     X = data_corr.copy()
 
