@@ -66,6 +66,9 @@ def drop_corr_feat(data, thres = 0.9):
     return data_corr
 
 def preprocessing(data):
+    """
+    data = panda daataframe
+    """
     # list of samples with no missing values
     null = (data.isnull().sum(axis=1) / len(data)).sort_values(ascending = False)
     list_samples = null[null<0.7].index.to_list() #0.7 is the percentage of missing values
@@ -78,9 +81,9 @@ def preprocessing(data):
     
     data = X.copy()
     #one-hot encoding for categorical data
-    data = pd.get_dummies(data, columns = [])
+    #data = pd.get_dummies(data, columns = [])
 
-    
+    #lists out columns with percentage...
     data_missing = (data.isnull().sum() / len(data)).sort_values(ascending = False)
     data_missing.head()
     
