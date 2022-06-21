@@ -79,6 +79,7 @@ def preprocessing(data):
     X = data.drop('target',axis=1)
     y = data['target']
     
+    #making a copy to keep the original unaffected
     data = X.copy()
     #one-hot encoding for categorical data
     #data = pd.get_dummies(data, columns = [])
